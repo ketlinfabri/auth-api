@@ -1,47 +1,47 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Header
-from register_user.app import sign_up, confirm_sign_up, login
-from utils.jwt_utils import decode_token
+from fastapi import FastAPI, HTTPException
+
+from models.user_auth import SignupRequest, ConfirmRequest, LoginRequest, RefreshTokenRequest
+from services.user_register import RegisterUser as User
 
 app = FastAPI()
 
 
 @app.post("/signup")
-def signup(username: str, email: str, password: str):
+def signup(data: SignupRequest):
     try:
-        response = sign_up(username, email, password)
-        username = response["UserSub"]
-        return {f"Usuário registrado. Verifique seu e-mail. Username: {username}"}
-
+        response = User.sign_up(data.username, data.email, data.password)
+        return {"message": "Usuário registrado", "username": response["UserSub"]}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @app.post("/confirm")
-def confirm(username: str, code: str):
+def confirm(data: ConfirmRequest):
     try:
-        confirm_sign_up(username, code)
-        return {f"Usuário confirmado."}
+        User.confirm_sign_up(data.username, data.code)
+        return {"message": "Usuário validado com sucesso."}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @app.post("/login")
-def do_login(username: str, password: str):
+def do_login(data: LoginRequest):
     try:
-        auth_result = login(username, password)
-        return {
-            "id_token": auth_result["IdToken"],
-            "access_token": auth_result["AccessToken"]
-        }
+        auth_result = User.login(data.username, data.password)
+        return auth_result
     except Exception as e:
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
 
-@app.get("/me")
-def me(Authorization: str = Header(...)):
+@app.post("/refresh")
+def refresh(data: RefreshTokenRequest):
     try:
-        token = Authorization.replace("Bearer ", "")
-        decoded = decode_token(token)
-        return {"user": decoded}
+        tokens = User.refresh_tokens(data.refresh_token)
+        return {
+            "access_token": tokens["AccessToken"],
+            "id_token": tokens["IdToken"],
+            "expires_in": tokens["ExpiresIn"],
+            "token_type": tokens["TokenType"]
+        }
     except Exception as e:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException(status_code=401, detail=str(e))
