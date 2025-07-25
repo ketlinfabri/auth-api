@@ -16,7 +16,3 @@ class Config(object):
         if value:
             return ast.literal_eval(value)
         return []
-
-
-      # AWS_ACCESS_KEY_ID: "AKIA3566Y2WN7IFYKNER"
-      # AWS_SECRET_ACCESS_KEY: "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"
