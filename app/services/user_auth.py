@@ -7,7 +7,7 @@ from config import Config
 
 load_dotenv()
 
-client = boto3.client(Config.get('awsClientCognito'), region_name=Config.get('awsRegion'))
+client = boto3.client(Config.get('awsClientCognito'), region_name=Config.get('AWS_REGION'))
 user_pool_id = Config.get("COGNITO_APP_CLIENT_ID")
 
 

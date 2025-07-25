@@ -1,12 +1,13 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 
-from models.user_auth import SignupRequest, ConfirmRequest, LoginRequest, RefreshTokenRequest
-from services.user_register import RegisterUser as User
-
-app = FastAPI()
+from app.models.user_auth import SignupRequest, ConfirmRequest, LoginRequest, RefreshTokenRequest
+from app.services.user_auth import RegisterUser as User
 
 
-@app.post("/signup")
+router = APIRouter(tags=["Usuários"])
+
+
+@router.post("/signup")
 def signup(data: SignupRequest):
     try:
         response = User.sign_up(data.username, data.email, data.password)
@@ -15,7 +16,7 @@ def signup(data: SignupRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/confirm")
+@router.post("/confirm")
 def confirm(data: ConfirmRequest):
     try:
         User.confirm_sign_up(data.username, data.code)
@@ -24,7 +25,7 @@ def confirm(data: ConfirmRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/login")
+@router.post("/login")
 def do_login(data: LoginRequest):
     try:
         auth_result = User.login(data.username, data.password)
@@ -33,7 +34,7 @@ def do_login(data: LoginRequest):
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
 
-@app.post("/refresh")
+@router.post("/refresh")
 def refresh(data: RefreshTokenRequest):
     try:
         tokens = User.refresh_tokens(data.refresh_token)
