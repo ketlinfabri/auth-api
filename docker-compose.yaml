@@ -6,9 +6,8 @@ services:
     container_name: auth-api
     ports:
       - "8080:8080"
-    environment:
-      AWS_REGION: us-east-1
-      COGNITO_APP_CLIENT_ID: "296unjdo8l02av4neefc9mo0tl"
+    env_file:
+      - .env
     networks:
       - backend
 
