@@ -1,0 +1,26 @@
+version: "3.10"
+
+services:
+  auth-api:
+    build: .
+    container_name: auth-api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    networks:
+      - backend
+
+  revenda-api:
+    build: .
+    container_name: revenda-api
+    ports:
+      - "8001:8001"
+    networks:
+      - backend
+    depends_on:
+      - auth-api
+
+networks:
+  backend:
+    driver: bridge

@@ -1,0 +1,90 @@
+{
+  "info": {
+    "name": "FIAP | Revenda Veículos - Auth Users",
+    "_postman_id": "c0a1f160-01b2-4dc3-b9ab-e47cbee7f7dd",
+    "description": "Coleção de rotas para autenticação com FastAPI e AWS Cognito",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testeuser\",\n  \"email\": \"teste@exemplo.com\",\n  \"password\": \"Senha123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/signup",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["signup"]
+        }
+      }
+    },
+    {
+      "name": "Confirm Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testeuser\",\n  \"code\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/confirm",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["confirm"]
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testeuser\",\n  \"password\": \"Senha123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["login"]
+        }
+      }
+    },
+    {
+      "name": "Refresh Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\": \"<cole_o_refresh_token_aqui>\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/refresh",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["refresh"]
+        }
+      }
+    }
+  ]
+}
